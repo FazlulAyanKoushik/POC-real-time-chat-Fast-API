@@ -1,39 +1,3 @@
-this will install all the dependencies
-```bash
-uv sync
-```
-
-## Run command
-```bash
-  uv run fastapi dev --reload
-```
-## For production run command
-```bash
-  uv run fastapi run --reload
-```
-
-
-How to create alembic
-```bash
-  alembic init migrations
-```
-Configure Alembic
-Edit alembic.ini and set the DB URL
-```bash
-    sqlalchemy.url = sqlite+aiosqlite:///./chat.db
-    # sqlalchemy.url = postgresql+asyncpg://user:pass@localhost:5432/chatdb
-```
-Create migration:
-```bash
-    alembic revision --autogenerate -m "Initial migration"
-```
-Apply migration:
-```bash
-    alembic upgrade head
-```
-
-Edit migrations/env.py like this:
-```python
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from sqlalchemy.ext.asyncio import AsyncEngine
@@ -93,4 +57,3 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     asyncio.run(run_migrations_online())
-```
