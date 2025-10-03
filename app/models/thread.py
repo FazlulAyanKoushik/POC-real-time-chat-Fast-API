@@ -32,4 +32,4 @@ class ThreadParticipant(Base):
 
     # Relationships
     thread = relationship("Thread", back_populates="participants")
-    user = relationship("User", back_populates="received_threads")
+    user = relationship("User", back_populates="thread_participants")

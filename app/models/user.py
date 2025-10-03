@@ -19,11 +19,21 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
-    # Relationships
+    # Relationships - using string references to avoid circular imports
     sent_messages = relationship("Message", foreign_keys="Message.sender_id", back_populates="sender")
-    received_threads = relationship("ThreadParticipant", back_populates="user")
-    friendships = relationship("Friendship", foreign_keys="Friendship.user_id", back_populates="user")
-    friend_of = relationship("Friendship", foreign_keys="Friendship.friend_id", back_populates="friend")
+    thread_participants = relationship("ThreadParticipant", back_populates="user")
+
+    # Friendship relationships
+    initiated_friendships = relationship(
+        "Friendship",
+        foreign_keys="Friendship.user_id",
+        back_populates="user"
+    )
+    received_friendships = relationship(
+        "Friendship",
+        foreign_keys="Friendship.friend_id",
+        back_populates="friend"
+    )
 
 
 class Friendship(Base):
@@ -35,5 +45,5 @@ class Friendship(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
-    user = relationship("User", foreign_keys=[user_id], back_populates="friendships")
-    friend = relationship("User", foreign_keys=[friend_id], back_populates="friend_of")
+    user = relationship("User", foreign_keys=[user_id], back_populates="initiated_friendships")
+    friend = relationship("User", foreign_keys=[friend_id], back_populates="received_friendships")
